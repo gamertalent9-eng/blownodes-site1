@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BlowNodes | Game Server & VPS Hosting</title>
+<meta name="description" content="BlowNodes: Minecraft, game server and premium VPS hosting. Power Your Ideas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+/* ===== THEME VARIABLES ===== */
+:root{
+  --red:#FF0000; --red-soft:#ff4d4d; --red-glow:rgba(255,0,0,.35);
+  --bg:#08080a; --bg2:#101014; --card:rgba(255,255,255,.04); --line:rgba(255,255,255,.09);
+  --text:#f4f4f6; --muted:#a3a3ad; --ok:#2ecc71;
+  --head:'Chakra Petch',system-ui,sans-serif; --body:'Manrope',system-ui,sans-serif;
+  --r:16px; --nav:72px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:var(--nav)}
+body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.65;overflow-x:hidden}
+h1,h2,h3,h4{font-family:var(--head);line-height:1.1;letter-spacing:.01em}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+img,svg{max-width:100%}
+:focus-visible{outline:2px solid var(--red-soft);outline-offset:3px;border-radius:6px}
+.wrap{width:min(1180px,92%);margin-inline:auto}
+section{padding:96px 0;position:relative}
+.sec-head{max-width:640px;margin-bottom:48px}
+.sec-head.center{margin-inline:auto;text-align:center}
+.sec-head h2{font-size:clamp(1.9rem,4vw,2.8rem);margin-bottom:14px}
+.sec-head p{color:var(--muted)}
+.skip{position:absolute;left:-999px;top:8px;background:var(--red);padding:8px 14px;border-radius:8px;z-index:200}
+.skip:focus{left:8px}
+
+/* ===== BUTTONS ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:13px 26px;border-radius:12px;border:1px solid transparent;font:600 .95rem var(--body);cursor:pointer;transition:transform .25s,box-shadow .25s,background .25s;color:#fff}
+.btn:hover{transform:translateY(-3px) scale(1.03)}
+.btn-red{background:linear-gradient(135deg,var(--red),#b00000);box-shadow:0 8px 28px var(--red-glow)}
+.btn-red:hover{box-shadow:0 12px 38px rgba(255,0,0,.55)}
+.btn-ghost{background:var(--card);border-color:var(--line);backdrop-filter:blur(8px)}
+.btn-ghost:hover{border-color:var(--red);background:rgba(255,0,0,.08)}
+.btn-block{width:100%}
+
+/* ===== NAVBAR ===== */
+header{position:fixed;inset:0 0 auto 0;height:var(--nav);z-index:100;background:rgba(8,8,10,.6);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.nav{height:100%;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{display:flex;align-items:center;gap:10px;font:700 1.35rem var(--head)}
+.logo i{color:var(--red);filter:drop-shadow(0 0 8px var(--red))}
+.logo b{color:var(--red)}
+.nav ul{display:flex;gap:30px}
+.nav ul a{color:var(--muted);font-weight:600;font-size:.93rem;padding:6px 0;position:relative;transition:color .2s}
+.nav ul a:hover,.nav ul a.active{color:#fff}
+.nav ul a::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--red);transition:width .25s}
+.nav ul a:hover::after,.nav ul a.active::after{width:100%}
+.burger{display:none;background:none;border:1px solid var(--line);color:#fff;width:44px;height:44px;border-radius:10px;font-size:1.2rem;cursor:pointer}
+
+/* ===== HERO ===== */
+.hero{min-height:90vh;display:flex;align-items:center;padding:calc(var(--nav) + 40px) 0 60px;background:radial-gradient(900px 500px at 80% 30%,rgba(255,0,0,.16),transparent 60%),radial-gradient(600px 400px at 0% 100%,rgba(255,0,0,.08),transparent 60%)}
+#particles{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;position:relative}
+.hero h1{font-size:clamp(2.6rem,7vw,5.2rem);font-weight:700;margin-bottom:22px}
+.grad{background:linear-gradient(90deg,#fff,var(--red) 55%,#ff6b6b);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--muted);font-size:1.12rem;max-width:520px;margin-bottom:34px}
+.hero-btns{display:flex;flex-wrap:wrap;gap:14px}
+.rack{position:relative;display:grid;gap:12px;padding:22px;border-radius:22px;background:var(--card);border:1px solid var(--line);backdrop-filter:blur(10px);box-shadow:0 0 80px rgba(255,0,0,.15);animation:float 6s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-14px)}}
+.unit{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:12px;background:#0d0d11;border:1px solid var(--line)}
+.unit .bars{flex:1;display:grid;grid-template-columns:repeat(12,1fr);gap:4px}
+.unit .bars span{height:8px;border-radius:2px;background:#22222a}
+.unit .bars span.on{background:var(--red);box-shadow:0 0 8px var(--red);animation:blink 2.4s infinite}
+.unit .bars span.on:nth-child(3n){animation-delay:.6s}.unit .bars span.on:nth-child(4n){animation-delay:1.2s}
+@keyframes blink{50%{opacity:.35}}
+.led{width:10px;height:10px;border-radius:50%;background:var(--ok);box-shadow:0 0 10px var(--ok)}
+.unit small{color:var(--muted);font-size:.75rem;min-width:62px}
+
+/* ===== GLASS CARD ===== */
+.glass{background:var(--card);border:1px solid var(--line);border-radius:var(--r);backdrop-filter:blur(10px);transition:transform .3s,border-color .3s,box-shadow .3s}
+.glass:hover{transform:translateY(-6px);border-color:rgba(255,0,0,.5);box-shadow:0 18px 50px rgba(255,0,0,.12)}
+
+/* ===== STATS ===== */
+.stats{padding:0;margin-top:-20px}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.stat{padding:26px;text-align:center}
+.stat i{font-size:1.6rem;color:var(--red);margin-bottom:12px}
+.stat strong{display:block;font:700 1.15rem var(--head)}
+.stat span{color:var(--muted);font-size:.9rem}
+.stat .num{font:700 2rem var(--head);color:#fff}
+
+/* ===== SERVICES ===== */
+.cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.svc{padding:34px;display:flex;flex-direction:column}
+.ico{width:60px;height:60px;border-radius:16px;display:grid;place-items:center;font-size:1.5rem;color:#fff;background:linear-gradient(135deg,var(--red),#600);box-shadow:0 0 26px var(--red-glow);margin-bottom:22px}
+.svc h3{font-size:1.4rem;margin-bottom:10px}
+.svc>p{color:var(--muted);margin-bottom:18px}
+.svc ul{margin-bottom:26px;flex:1}
+.svc li{padding:6px 0;color:#d8d8de;font-size:.95rem}
+.svc li i{color:var(--red);margin-right:10px;font-size:.8rem}
+
+/* ===== FEATURES ===== */
+.why{background:var(--bg2)}
+.feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.feat{padding:26px}
+.feat i{font-size:1.5rem;color:var(--red);margin-bottom:14px;display:block}
+.feat h3{font-size:1.1rem;margin-bottom:6px}
+.feat p{color:var(--muted);font-size:.9rem}
+
+/* ===== PRICING ===== */
+.tabs{display:inline-flex;padding:6px;gap:6px;border-radius:14px;margin-bottom:40px}
+.tab{background:none;border:0;color:var(--muted);padding:11px 24px;border-radius:10px;font:600 .95rem var(--body);cursor:pointer;transition:.25s}
+.tab[aria-selected="true"]{background:var(--red);color:#fff;box-shadow:0 0 22px var(--red-glow)}
+.panel[hidden]{display:none}
+.plan{padding:34px 28px;position:relative}
+.plan.rec{border-color:var(--red);box-shadow:0 0 50px rgba(255,0,0,.25);background:linear-gradient(180deg,rgba(255,0,0,.1),var(--card))}
+.badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--red);padding:4px 16px;border-radius:99px;font:700 .75rem var(--body)}
+.plan h3{font-size:1.3rem}
+.price{font:700 2.4rem var(--head);margin:14px 0 4px}
+.price small{font:500 .9rem var(--body);color:var(--muted)}
+.plan ul{margin:22px 0 28px;border-top:1px solid var(--line)}
+.plan li{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);font-size:.93rem}
+.plan li span{color:var(--muted)}
+.note{color:var(--muted);font-size:.85rem;margin-top:22px}
+
+/* ===== CONTROL PANEL ===== */
+.dash-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:48px;align-items:center}
+.dash-grid h2{font-size:clamp(1.9rem,4vw,2.8rem);margin-bottom:16px}
+.dash-grid>div>p{color:var(--muted);margin-bottom:22px}
+.dash-grid li{padding:6px 0}.dash-grid li i{color:var(--red);margin-right:10px}
+.dash{padding:20px;box-shadow:0 0 70px rgba(255,0,0,.12)}
+.dash:hover{transform:none}
+.dash-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line);flex-wrap:wrap;gap:8px}
+.status{display:flex;align-items:center;gap:8px;font-weight:700}
+.status .led{transition:.3s}
+.status.off .led{background:#777;box-shadow:none}
+.meters{display:grid;gap:14px;margin-bottom:20px}
+.meter label{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted);margin-bottom:6px}
+.track{height:9px;border-radius:9px;background:#1d1d24;overflow:hidden}
+.fill{height:100%;width:0;border-radius:9px;background:linear-gradient(90deg,#900,var(--red));box-shadow:0 0 12px var(--red);transition:width .9s}
+.ctrls{display:flex;flex-wrap:wrap;gap:10px}
+.ctrls button{flex:1;min-width:90px;padding:10px;border-radius:10px;background:#15151b;border:1px solid var(--line);color:#fff;font:600 .85rem var(--body);cursor:pointer;transition:.2s}
+.ctrls button:hover{border-color:var(--red);background:rgba(255,0,0,.1)}
+.console{margin-top:16px;padding:12px;border-radius:10px;background:#050507;font:.78rem/1.6 ui-monospace,Menlo,Consolas,monospace;color:#9fe7b0;height:92px;overflow:hidden}
+.dash-note{font-size:.78rem;color:var(--muted);margin-top:10px}
+
+/* ===== ABOUT ===== */
+.about{background:var(--bg2)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.about h2{font-size:clamp(1.9rem,4vw,2.8rem);margin-bottom:18px}
+.about p{color:var(--muted)}
+.about-vis{padding:30px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.about-vis:hover{transform:none}
+.cab{background:#0b0b0e;border:1px solid var(--line);border-radius:10px;padding:10px;display:grid;gap:7px}
+.cab i{display:block;height:20px;border-radius:4px;background:#1a1a20;position:relative}
+.cab i::after{content:"";position:absolute;right:6px;top:7px;width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:0 0 8px var(--red)}
+.cab i:nth-child(3n)::after{background:var(--ok);box-shadow:0 0 8px var(--ok)}
+
+/* ===== FAQ ===== */
+.faq-list{max-width:820px;margin-inline:auto;display:grid;gap:12px}
+.faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 24px;background:none;border:0;color:#fff;font:600 1.02rem var(--body);text-align:left;cursor:pointer}
+.faq-q i{color:var(--red);transition:transform .3s}
+.faq-item.open .faq-q i{transform:rotate(45deg)}
+.faq-a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s}
+.faq-item.open .faq-a{grid-template-rows:1fr}
+.faq-a div{overflow:hidden}
+.faq-a p{padding:0 24px 22px;color:var(--muted)}
+.faq-item:hover{transform:none}
+.faq-item.open{border-color:rgba(255,0,0,.5)}
+
+/* ===== CONTACT ===== */
+.contact-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:48px}
+.contact-grid h2{font-size:clamp(1.9rem,4vw,2.8rem);margin-bottom:16px}
+.contact-grid>div>p{color:var(--muted);margin-bottom:22px}
+form{padding:32px;display:grid;gap:18px}
+form:hover{transform:none}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.field label{display:block;font-size:.85rem;font-weight:600;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;padding:13px 14px;border-radius:10px;background:#0d0d11;border:1px solid var(--line);color:#fff;font:inherit;transition:border-color .2s,box-shadow .2s}
+.field textarea{min-height:130px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{outline:0;border-color:var(--red);box-shadow:0 0 0 3px rgba(255,0,0,.2)}
+.field.bad input,.field.bad select,.field.bad textarea{border-color:#ff5a5a}
+.err{color:#ff7a7a;font-size:.8rem;min-height:1.1em;margin-top:4px}
+.form-msg{padding:12px 14px;border-radius:10px;font-size:.9rem;background:rgba(255,255,255,.05);border:1px solid var(--line)}
+.form-msg[hidden]{display:none}
+
+/* ===== CTA ===== */
+.cta{text-align:center;background:radial-gradient(700px 300px at 50% 50%,rgba(255,0,0,.22),transparent 70%);border-block:1px solid var(--line)}
+.cta h2{font-size:clamp(1.9rem,5vw,3.4rem);margin-bottom:14px}
+.cta p{color:var(--muted);margin-bottom:30px}
+
+/* ===== FOOTER ===== */
+footer{padding:64px 0 28px;background:#050507;border-top:1px solid var(--line)}
+.foot-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:36px;margin-bottom:40px}
+.foot-grid p{color:var(--muted);font-size:.92rem;margin:14px 0 18px;max-width:320px}
+.foot-grid h4{font-size:1rem;margin-bottom:14px}
+.foot-grid li{margin-bottom:9px}
+.foot-grid li a{color:var(--muted);font-size:.92rem;transition:color .2s}
+.foot-grid li a:hover{color:var(--red-soft)}
+.social{display:flex;gap:10px}
+.social a{width:40px;height:40px;display:grid;place-items:center;border-radius:10px;background:var(--card);border:1px solid var(--line);transition:.25s}
+.social a:hover{background:var(--red);transform:translateY(-3px)}
+.copy{padding-top:24px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+/* ===== BACK TO TOP + REVEAL ===== */
+#top{position:fixed;right:22px;bottom:22px;width:48px;height:48px;border-radius:14px;border:0;background:var(--red);color:#fff;font-size:1.1rem;cursor:pointer;box-shadow:0 0 24px var(--red-glow);opacity:0;visibility:hidden;transform:translateY(12px);transition:.3s;z-index:90}
+#top.show{opacity:1;visibility:visible;transform:none}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
+.reveal.in{opacity:1;transform:none}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){
+  .cards3,.feat-grid{grid-template-columns:repeat(2,1fr)}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .foot-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:860px){
+  .burger{display:block}
+  .nav ul{position:fixed;top:var(--nav);left:0;right:0;flex-direction:column;gap:0;background:rgba(8,8,10,.97);padding:10px 4%;border-bottom:1px solid var(--line);transform:translateY(-120%);transition:transform .35s}
+  .nav ul.open{transform:none}
+  .nav ul a{display:block;padding:14px 0}
+  .nav .btn{display:none}
+  .hero-grid,.dash-grid,.about-grid,.contact-grid{grid-template-columns:1fr}
+  .rack{max-width:480px}
+  section{padding:72px 0}
+}
+@media(max-width:600px){
+  .cards3,.feat-grid,.row,.foot-grid{grid-template-columns:1fr}
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .tabs{display:flex}.tab{flex:1;padding:11px 8px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ===== NAVIGATION ===== -->
+<header>
+  <nav class="wrap nav" aria-label="Main">
+    <a href="#home" class="logo"><i class="fa-solid fa-bolt"></i>Blow<b>Nodes</b></a>
+    <ul id="menu">
+      <li><a href="#home" class="active">Home</a></li>
+      <li><a href="#game-hosting">Game Hosting</a></li>
+      <li><a href="#vps-hosting">VPS Hosting</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#pricing" class="btn btn-red">Get Started</a>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><i class="fa-solid fa-bars"></i></button>
+  </nav>
+</header>
+
+<main id="main">
+<!-- ===== HERO ===== -->
+<section class="hero" id="home">
+  <canvas id="particles" aria-hidden="true"></canvas>
+  <div class="wrap hero-grid">
+    <div>
+      <h1>POWER YOUR <span class="grad">IDEAS.</span><br><span class="grad">BlowNodes</span></h1>
+      <p>Experience next-generation hosting with powerful hardware, premium performance, and reliable infrastructure.</p>
+      <div class="hero-btns">
+        <a href="#game-hosting" class="btn btn-red"><i class="fa-solid fa-server"></i> Explore Hosting</a>
+        <a href="#pricing" class="btn btn-ghost">Get Started</a>
+      </div>
+    </div>
+    <div class="rack" aria-hidden="true" id="rack"></div>
+  </div>
+</section>
+
+<!-- ===== STATS ===== -->
+<section class="stats" aria-label="Highlights">
+  <div class="wrap stat-grid">
+    <div class="glass stat reveal"><i class="fa-solid fa-gauge-high"></i><strong>High Performance</strong><span>Infrastructure</span></div>
+    <div class="glass stat reveal"><i class="fa-solid fa-cloud"></i><strong>Premium</strong><span>VPS Solutions</span></div>
+    <div class="glass stat reveal"><i class="fa-solid fa-microchip"></i><strong>Powerful</strong><span>Server Hardware</span></div>
+    <div class="glass stat reveal"><i class="fa-solid fa-headset"></i><div class="num"><span data-count="24">0</span>/<span data-count="7">0</span></div><span>Support</span></div>
+  </div>
+</section>
+
+<!-- ===== SERVICES ===== -->
+<section id="game-hosting">
+  <div class="wrap">
+    <div class="sec-head center reveal"><h2>Hosting built for every project</h2><p>Pick a service and compare plans.</p></div>
+    <div class="cards3">
+      <article class="glass svc reveal">
+        <div class="ico"><i class="fa-solid fa-cube"></i></div>
+        <h3>Minecraft Hosting</h3>
+        <p>High-performance Minecraft servers.</p>
+        <ul>
+          <li><i class="fa-solid fa-check"></i>Java &amp; Bedrock compatibility</li>
+          <li><i class="fa-solid fa-check"></i>Modpack and plugin support</li>
+          <li><i class="fa-solid fa-check"></i>Easy server management</li>
+          <li><i class="fa-solid fa-check"></i>Optimized performance</li>
+        </ul>
+        <a href="#pricing" class="btn btn-ghost" data-tab="mc">Explore Plans</a>
+      </article>
+      <article class="glass svc reveal">
+        <div class="ico"><i class="fa-solid fa-gamepad"></i></div>
+        <h3>Game Server Hosting</h3>
+        <p>Powerful gaming infrastructure.</p>
+        <ul>
+          <li><i class="fa-solid fa-check"></i>Low-latency experience</li>
+          <li><i class="fa-solid fa-check"></i>Flexible server configurations</li>
+          <li><i class="fa-solid fa-check"></i>Reliable performance</li>
+        </ul>
+        <a href="#contact" class="btn btn-ghost" data-service="game">Explore Plans</a>
+      </article>
+      <article class="glass svc reveal" id="vps-hosting">
+        <div class="ico"><i class="fa-solid fa-hard-drive"></i></div>
+        <h3>Premium VPS Hosting</h3>
+        <p>Powerful VPS specifications.</p>
+        <ul>
+          <li><i class="fa-solid fa-check"></i>Dedicated resources</li>
+          <li><i class="fa-solid fa-check"></i>Root access</li>
+          <li><i class="fa-solid fa-check"></i>Flexible configurations</li>
+          <li><i class="fa-solid fa-check"></i>Suited to development and hosting workloads</li>
+        </ul>
+        <a href="#pricing" class="btn btn-ghost" data-tab="vps">Explore Plans</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHY CHOOSE ===== -->
+<section class="why" id="features">
+  <div class="wrap">
+    <div class="sec-head center reveal"><h2>Why choose BlowNodes?</h2><p>Everything you need to run servers without the friction.</p></div>
+    <div class="feat-grid">
+      <div class="glass feat reveal"><i class="fa-solid fa-microchip"></i><h3>Powerful Hardware</h3><p>Modern machines for demanding workloads.</p></div>
+      <div class="glass feat reveal"><i class="fa-solid fa-bolt"></i><h3>High Performance</h3><p>Tuned for smooth, responsive servers.</p></div>
+      <div class="glass feat reveal"><i class="fa-solid fa-network-wired"></i><h3>Reliable Infrastructure</h3><p>Built to stay online.</p></div>
+      <div class="glass feat reveal"><i class="fa-solid fa-shield-halved"></i><h3>Advanced Security</h3><p>Protection for your servers and data.</p></div>
+      <div class="glass feat reveal"><i class="fa-solid fa-sliders"></i><h3>Easy Management</h3><p>Control everything from one panel.</p></div>
+      <div class="glass feat reveal"><i class="fa-solid fa-headset"></i><h3>Dedicated Support</h3><p>Help when you need it.</p></div>
+      <div class="glass feat reveal"><i class="fa-solid fa-layer-group"></i><h3>Flexible Plans</h3><p>Start small and scale up.</p></div>
+      <div class="glass feat reveal"><i class="fa-solid fa-wallet"></i><h3>Affordable Hosting</h3><p>Premium hosting at fair prices.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRICING (placeholders: edit the data in each card) ===== -->
+<section id="pricing">
+  <div class="wrap">
+    <div class="sec-head reveal"><h2>Hosting plans</h2><p>Choose a category, then a plan.</p></div>
+    <div class="glass tabs" role="tablist" aria-label="Plan categories">
+      <button class="tab" role="tab" id="t-mc" aria-controls="p-mc" aria-selected="true">Minecraft Hosting Plans</button>
+      <button class="tab" role="tab" id="t-vps" aria-controls="p-vps" aria-selected="false">VPS Hosting Plans</button>
+    </div>
+
+    <div class="panel cards3" id="p-mc" role="tabpanel" aria-labelledby="t-mc">
+      <!-- EDIT: replace placeholders with real prices/specs -->
+      <article class="glass plan"><h3>Plan 1</h3><div class="price">$XX<small> /mo</small></div>
+        <ul><li>RAM<span>[RAM]</span></li><li>CPU<span>[CPU]</span></li><li>Storage<span>[Storage]</span></li><li>Extras<span>[Feature]</span></li></ul>
+        <a href="#contact" class="btn btn-ghost btn-block" data-service="minecraft">Order Now</a></article>
+      <article class="glass plan rec"><span class="badge">Recommended</span><h3>Plan 2</h3><div class="price">$XX<small> /mo</small></div>
+        <ul><li>RAM<span>[RAM]</span></li><li>CPU<span>[CPU]</span></li><li>Storage<span>[Storage]</span></li><li>Extras<span>[Feature]</span></li></ul>
+        <a href="#contact" class="btn btn-red btn-block" data-service="minecraft">Order Now</a></article>
+      <article class="glass plan"><h3>Plan 3</h3><div class="price">$XX<small> /mo</small></div>
+        <ul><li>RAM<span>[RAM]</span></li><li>CPU<span>[CPU]</span></li><li>Storage<span>[Storage]</span></li><li>Extras<span>[Feature]</span></li></ul>
+        <a href="#contact" class="btn btn-ghost btn-block" data-service="minecraft">Order Now</a></article>
+    </div>
+
+    <div class="panel cards3" id="p-vps" role="tabpanel" aria-labelledby="t-vps" hidden>
+      <article class="glass plan"><h3>VPS 1</h3><div class="price">$XX<small> /mo</small></div>
+        <ul><li>RAM<span>[RAM]</span></li><li>CPU<span>[CPU]</span></li><li>Storage<span>[Storage]</span></li><li>Extras<span>[Feature]</span></li></ul>
+        <a href="#contact" class="btn btn-ghost btn-block" data-service="vps">Order Now</a></article>
+      <article class="glass plan rec"><span class="badge">Recommended</span><h3>VPS 2</h3><div class="price">$XX<small> /mo</small></div>
+        <ul><li>RAM<span>[RAM]</span></li><li>CPU<span>[CPU]</span></li><li>Storage<span>[Storage]</span></li><li>Extras<span>[Feature]</span></li></ul>
+        <a href="#contact" class="btn btn-red btn-block" data-service="vps">Order Now</a></article>
+      <article class="glass plan"><h3>VPS 3</h3><div class="price">$XX<small> /mo</small></div>
+        <ul><li>RAM<span>[RAM]</span></li><li>CPU<span>[CPU]</span></li><li>Storage<span>[Storage]</span></li><li>Extras<span>[Feature]</span></li></ul>
+        <a href="#contact" class="btn btn-ghost btn-block" data-service="vps">Order Now</a></article>
+    </div>
+    <p class="note">Prices and specifications shown are placeholders. Edit them directly in the HTML.</p>
+  </div>
+</section>
+
+<!-- ===== CONTROL PANEL PREVIEW ===== -->
+<section class="why" id="panel">
+  <div class="wrap dash-grid">
+    <div class="reveal">
+      <h2>Manage everything from one panel</h2>
+      <p>Start, stop and monitor your server without touching a terminal.</p>
+      <ul><li><i class="fa-solid fa-circle-check"></i>Live status and resource usage</li><li><i class="fa-solid fa-circle-check"></i>One-click power controls</li><li><i class="fa-solid fa-circle-check"></i>Console access</li></ul>
+    </div>
+    <div class="glass dash reveal" id="dash">
+      <div class="dash-top"><strong><i class="fa-solid fa-cube" style="color:var(--red)"></i> my-server</strong>
+        <span class="status" id="status"><span class="led"></span><span id="stxt">Online</span></span></div>
+      <div class="meters">
+        <div class="meter"><label>CPU <span id="v-cpu">0%</span></label><div class="track"><div class="fill" id="f-cpu"></div></div></div>
+        <div class="meter"><label>RAM <span id="v-ram">0%</span></label><div class="track"><div class="fill" id="f-ram"></div></div></div>
+        <div class="meter"><label>Storage <span id="v-disk">0%</span></label><div class="track"><div class="fill" id="f-disk"></div></div></div>
+      </div>
+      <div class="ctrls">
+        <button data-act="start"><i class="fa-solid fa-play"></i> Start</button>
+        <button data-act="restart"><i class="fa-solid fa-rotate"></i> Restart</button>
+        <button data-act="stop"><i class="fa-solid fa-stop"></i> Stop</button>
+      </div>
+      <div class="console" id="console" aria-live="polite"></div>
+      <p class="dash-note">Interactive preview with sample data. Not a live server.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ABOUT ===== -->
+<section class="about" id="about">
+  <div class="wrap about-grid">
+    <div class="reveal">
+      <h2>BUILT FOR PERFORMANCE. POWERED BY INNOVATION.</h2>
+      <p>BlowNodes is a next-generation hosting brand focused on delivering powerful server and VPS hosting solutions. Our mission is to provide reliable infrastructure, high performance, and an exceptional hosting experience.</p>
+    </div>
+    <div class="glass about-vis reveal" id="cabs" aria-hidden="true"></div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head center reveal"><h2>Frequently asked questions</h2></div>
+    <div class="faq-list" id="faq-list">
+      <!-- EDIT: answers are general; update with your real details -->
+      <div class="glass faq-item"><button class="faq-q" aria-expanded="false">What is BlowNodes? <i class="fa-solid fa-plus"></i></button><div class="faq-a"><div><p>BlowNodes is a hosting brand offering game server and VPS hosting with a focus on performance and reliability.</p></div></div></div>
+      <div class="glass faq-item"><button class="faq-q" aria-expanded="false">What hosting services do you provide? <i class="fa-solid fa-plus"></i></button><div class="faq-a"><div><p>Minecraft hosting, game server hosting and premium VPS hosting.</p></div></div></div>
+      <div class="glass faq-item"><button class="faq-q" aria-expanded="false">Do you support Minecraft Java and Bedrock? <i class="fa-solid fa-plus"></i></button><div class="faq-a"><div><p>Yes. Our Minecraft hosting is compatible with both Java and Bedrock editions.</p></div></div></div>
+      <div class="glass faq-item"><button class="faq-q" aria-expanded="false">How can I purchase a hosting plan? <i class="fa-solid fa-plus"></i></button><div class="faq-a"><div><p>Pick a plan in the Pricing section and press Order Now, or use the contact form to tell us what you need.</p></div></div></div>
+      <div class="glass faq-item"><button class="faq-q" aria-expanded="false">Do you provide VPS hosting? <i class="fa-solid fa-plus"></i></button><div class="faq-a"><div><p>Yes. Our VPS plans include dedicated resources and root access.</p></div></div></div>
+      <div class="glass faq-item"><button class="faq-q" aria-expanded="false">How can I contact support? <i class="fa-solid fa-plus"></i></button><div class="faq-a"><div><p>Use the contact form below or join our Discord community (link to be added).</p></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section class="why" id="contact">
+  <div class="wrap contact-grid">
+    <div class="reveal">
+      <h2>Talk to us</h2>
+      <p>Tell us what you want to host and we'll point you to the right plan.</p>
+      <ul><li><i class="fa-brands fa-discord" style="color:var(--red);margin-right:10px"></i>Discord: add your invite link</li><li><i class="fa-solid fa-envelope" style="color:var(--red);margin-right:10px"></i>Email: add your address</li></ul>
+    </div>
+    <form class="glass reveal" id="form" novalidate>
+      <div class="row">
+        <div class="field"><label for="name">Full name</label><input id="name" name="name" autocomplete="name" required><div class="err"></div></div>
+        <div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" required><div class="err"></div></div>
+      </div>
+      <div class="row">
+        <div class="field"><label for="subject">Subject</label><input id="subject" name="subject" required><div class="err"></div></div>
+        <div class="field"><label for="service">Service</label>
+          <select id="service" name="service" required><option value="">Select a service</option><option value="minecraft">Minecraft Hosting</option><option value="game">Game Server Hosting</option><option value="vps">VPS Hosting</option><option value="other">Other</option></select><div class="err"></div></div>
+      </div>
+      <div class="field"><label for="message">Message</label><textarea id="message" name="message" required minlength="10"></textarea><div class="err"></div></div>
+      <button class="btn btn-red" type="submit"><i class="fa-solid fa-paper-plane"></i> Send message</button>
+      <div class="form-msg" id="form-msg" role="status" hidden></div>
+    </form>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta">
+  <div class="wrap reveal">
+    <h2>READY TO POWER YOUR NEXT PROJECT?</h2>
+    <p>Choose BlowNodes and experience hosting without limits.</p>
+    <a href="#pricing" class="btn btn-red">GET STARTED NOW</a>
+  </div>
+</section>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div><a href="#home" class="logo"><i class="fa-solid fa-bolt"></i>Blow<b>Nodes</b></a>
+        <p>Game server and VPS hosting built for performance. Power Your Ideas.</p>
+        <div class="social"><a href="#" aria-label="Discord"><i class="fa-brands fa-discord"></i></a><a href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a><a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a><a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a></div></div>
+      <div><h4>Quick links</h4><ul><li><a href="#home">Home</a></li><li><a href="#features">Features</a></li><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li></ul></div>
+      <div><h4>Hosting</h4><ul><li><a href="#game-hosting">Minecraft Hosting</a></li><li><a href="#game-hosting">Game Servers</a></li><li><a href="#vps-hosting">VPS Hosting</a></li><li><a href="#pricing">Plans</a></li></ul></div>
+      <div><h4>Support</h4><ul><li><a href="#faq">FAQ</a></li><li><a href="#contact">Contact support</a></li><li><a href="#">Discord community</a></li></ul></div>
+    </div>
+    <div class="copy"><span>&copy; <span id="year"></span> BlowNodes. All rights reserved.</span><span>Power Your Ideas.</span></div>
+  </div>
+</footer>
+
+<button id="top" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+
+<script>
+(() => {
+  const $ = (s, c = document) => c.querySelector(s), $$ = (s, c = document) => [...c.querySelectorAll(s)];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  $('#year').textContent = new Date().getFullYear();
+
+  /* Mobile menu */
+  const burger = $('#burger'), menu = $('#menu');
+  const setMenu = o => { menu.classList.toggle('open', o); burger.setAttribute('aria-expanded', o); burger.firstElementChild.className = o ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'; };
+  burger.onclick = () => setMenu(!menu.classList.contains('open'));
+  $$('#menu a').forEach(a => a.onclick = () => setMenu(false));
+  addEventListener('keydown', e => e.key === 'Escape' && setMenu(false));
+
+  /* Rack illustration + About cabinets */
+  const rack = $('#rack');
+  for (let i = 0; i < 4; i++) {
+    let bars = ''; for (let j = 0; j < 12; j++) bars += `<span class="${Math.random() > .4 ? 'on' : ''}"></span>`;
+    rack.insertAdjacentHTML('beforeend', `<div class="unit"><span class="led"></span><small>NODE-0${i + 1}</small><div class="bars">${bars}</div></div>`);
+  }
+  $('#cabs').innerHTML = Array.from({ length: 3 }, () => `<div class="cab">${'<i></i>'.repeat(7)}</div>`).join('');
+
+  /* Particles */
+  const cv = $('#particles'), cx = cv.getContext('2d'); let pts = [];
+  const size = () => { cv.width = cv.offsetWidth; cv.height = cv.offsetHeight; pts = Array.from({ length: Math.min(60, cv.width / 20) }, () => ({ x: Math.random() * cv.width, y: Math.random() * cv.height, r: Math.random() * 2 + .5, v: Math.random() * .4 + .1 })); };
+  const draw = () => {
+    cx.clearRect(0, 0, cv.width, cv.height);
+    pts.forEach(p => { p.y -= p.v; if (p.y < 0) { p.y = cv.height; p.x = Math.random() * cv.width; }
+      cx.beginPath(); cx.arc(p.x, p.y, p.r, 0, 6.3); cx.fillStyle = 'rgba(255,40,40,.65)'; cx.shadowColor = '#f00'; cx.shadowBlur = 10; cx.fill(); });
+    if (!reduce) requestAnimationFrame(draw);
+  };
+  size(); draw(); addEventListener('resize', size);
+
+  /* Scroll reveal + counters */
+  const count = el => { const t = +el.dataset.count; let n = 0; const step = () => { n += Math.max(1, t / 30); el.textContent = Math.min(t, Math.round(n)); if (n < t) requestAnimationFrame(step); }; reduce ? el.textContent = t : step(); };
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); $$('[data-count]', e.target).forEach(count); io.unobserve(e.target); } }), { threshold: .15 });
+  $$('.reveal').forEach(el => io.observe(el));
+
+  /* Active nav link, back-to-top */
+  const links = $$('#menu a'), secs = links.map(a => $(a.getAttribute('href')));
+  const topBtn = $('#top');
+  addEventListener('scroll', () => {
+    topBtn.classList.toggle('show', scrollY > 600);
+    let cur = 0; secs.forEach((s, i) => { if (s && s.getBoundingClientRect().top < 140) cur = i; });
+    links.forEach((a, i) => a.classList.toggle('active', i === cur));
+  }, { passive: true });
+  topBtn.onclick = () => scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+
+  /* Pricing tabs */
+  const tabs = $$('.tab');
+  const showTab = k => tabs.forEach(t => { const on = t.id === 't-' + k; t.setAttribute('aria-selected', on); $('#' + t.getAttribute('aria-controls')).hidden = !on; });
+  tabs.forEach(t => t.onclick = () => showTab(t.id.slice(2)));
+  $$('[data-tab]').forEach(a => a.addEventListener('click', () => showTab(a.dataset.tab)));
+
+  /* Prefill contact service from buttons */
+  $$('[data-service]').forEach(a => a.addEventListener('click', () => { $('#service').value = a.dataset.service; }));
+
+  /* Dashboard preview (sample data) */
+  let on = true, timers = [];
+  const set = (k, v) => { $('#f-' + k).style.width = v + '%'; $('#v-' + k).textContent = Math.round(v) + '%'; };
+  const log = t => { const c = $('#console'); c.insertAdjacentHTML('beforeend', `<div>&gt; ${t}</div>`); while (c.children.length > 4) c.firstChild.remove(); };
+  const metrics = () => on ? (set('cpu', 20 + Math.random() * 35), set('ram', 45 + Math.random() * 15), set('disk', 38)) : (set('cpu', 0), set('ram', 0), set('disk', 38));
+  const state = (o, txt) => { on = o; $('#status').classList.toggle('off', !o); $('#stxt').textContent = txt; metrics(); };
+  const dio = new IntersectionObserver(([e]) => { if (e.isIntersecting) { log('Server started.'); metrics(); setInterval(metrics, 2500); dio.disconnect(); } });
+  dio.observe($('#dash'));
+  $$('.ctrls button').forEach(b => b.onclick = () => {
+    timers.forEach(clearTimeout); timers = [];
+    const a = b.dataset.act;
+    if (a === 'stop') { log('Stopping server...'); timers.push(setTimeout(() => { state(false, 'Offline'); log('Server stopped.'); }, 700)); }
+    if (a === 'start') { if (on) return log('Server is already running.'); state(false, 'Starting'); log('Starting server...'); timers.push(setTimeout(() => { state(true, 'Online'); log('Server started.'); }, 900)); }
+    if (a === 'restart') { state(false, 'Restarting'); log('Restarting server...'); timers.push(setTimeout(() => { state(true, 'Online'); log('Server restarted.'); }, 1200)); }
+  });
+
+  /* FAQ accordion */
+  $$('.faq-q').forEach(q => q.onclick = () => {
+    const item = q.closest('.faq-item'), open = !item.classList.contains('open');
+    $$('.faq-item').forEach(i => { i.classList.remove('open'); $('.faq-q', i).setAttribute('aria-expanded', false); });
+    item.classList.toggle('open', open); q.setAttribute('aria-expanded', open);
+  });
+
+  /* Contact form: front-end validation only (no backend configured) */
+  const form = $('#form'), msg = $('#form-msg');
+  const rules = {
+    name: v => v.trim().length >= 2 || 'Enter your full name.',
+    email: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'Enter a valid email address.',
+    subject: v => v.trim().length >= 3 || 'Enter a subject (3+ characters).',
+    service: v => v !== '' || 'Select a service.',
+    message: v => v.trim().length >= 10 || 'Write at least 10 characters.'
+  };
+  const check = el => { const r = rules[el.name](el.value), f = el.closest('.field'); f.classList.toggle('bad', r !== true); $('.err', f).textContent = r === true ? '' : r; el.setAttribute('aria-invalid', r !== true); return r === true; };
+  $$('input,select,textarea', form).forEach(el => el.addEventListener('blur', () => check(el)));
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const ok = $$('input,select,textarea', form).map(check).every(Boolean);
+    msg.hidden = false;
+    if (!ok) { msg.textContent = 'Fix the highlighted fields and try again.'; $('.bad input,.bad select,.bad textarea', form)?.focus(); return; }
+    /* To go live, send the form data to your backend or a form service here, e.g. fetch('/api/contact', {method:'POST', body:new FormData(form)}) */
+    msg.textContent = 'Your details look valid, but this site has no backend connected yet, so nothing was sent. Contact us on Discord or by email instead.';
+  });
+})();
+</script>
+</body>
+</html>
